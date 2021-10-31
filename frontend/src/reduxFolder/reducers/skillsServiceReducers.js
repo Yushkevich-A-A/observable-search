@@ -4,20 +4,27 @@ const initialState = {
     error: null,
     search: '',
 }
-export default skillsServiceReducers = (state = initialState, action) => {
+const skillsServiceReducers = (state = initialState, action) => {
     switch (action.type) {
-        case 'SKILLS_REQUEST': 
-            return {...state, loading: true};
-        case 'SKILLS_ERROR':
+        case 'SEARCH_SKILLS_REQUEST': 
+            return { ...state, items: [], loading: true, error: null };
+        case 'SEARCH_SKILLS_ERROR':
             const { message } = action.payload;
-            return {...state, loading: false, error: message};
-        case 'SKILLS_SUCCESS':
+            return { ...state, items: [], loading: false, error: message };
+        case 'SEARCH_SKILLS_SUCCESS':
             const { items } = action.payload;
-            return {...state, items, loading: false, error: null};
+            return { ...state, items, loading: false, error: null };
         case 'CHANGE_SEARCH_FIELD':
                 const { search } = action.payload;
-                return {...state, search};
+                if (search === '') {
+                    return { ...initialState };
+                }
+                return { ...state, search };
+        case 'SEARCH_SKILLS_RESET':
+            return { ...state, items: [], loading: false, error: null };        
         default:
-            return {...state};
+            return { ...state };
     }
 }
+
+export default skillsServiceReducers;
